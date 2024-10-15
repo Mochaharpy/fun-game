@@ -9,6 +9,7 @@ let playerPosition = { x: 375, y: 275 };
 let level = 1;
 let exp = 0;
 let expToLevelUp = 100;
+let canAttack = true; // Track if the player can attack
 
 // Monster properties
 let monsterHealth = 50;
@@ -47,8 +48,13 @@ function levelUp() {
 
 // Function to attack the monster
 function attackMonster() {
-    if (isMonsterAlive && checkCollision()) {
+    if (isMonsterAlive && checkCollision() && canAttack) {
+        canAttack = false; // Prevent further attacks until cooldown
         monsterHealth -= 10; // Player does 10 damage
+        setTimeout(() => {
+            canAttack = true; // Reset attack ability after cooldown
+        }, 1000); // 1 second cooldown
+
         if (monsterHealth <= 0) {
             isMonsterAlive = false;
             dropExpItem(); // Drop an EXP item when monster dies
