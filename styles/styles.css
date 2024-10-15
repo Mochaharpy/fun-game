@@ -70,3 +70,13 @@ body {
     width: 0;
     background-color: green;
 }
+
+#settings {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 100;
+}
