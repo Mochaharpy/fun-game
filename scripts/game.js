@@ -3,6 +3,7 @@ const enemy = document.getElementById('enemy');
 const expItem = document.getElementById('exp-drop');
 const levelDisplay = document.getElementById('level');
 const expDisplay = document.getElementById('exp');
+const devButton = document.getElementById('dev-button');
 
 let playerPosition = { x: 375, y: 275 };
 let level = 1;
@@ -56,11 +57,8 @@ function attackMonster() {
 
 // Function to drop the EXP item
 function dropExpItem() {
-    // Calculate EXP drop with a little variation
     const expDropped = Math.floor(monsterExp * (1 + (Math.random() * 0.2 - 0.1))); // 10% variation
     expOrbCount++; // Increment the orb count
-
-    // Calculate size based on the number of orbs dropped
     const size = Math.max(20, 20 + (expOrbCount * 2)); // Size grows but caps at a certain point
 
     expItem.innerText = expDropped; // Show the EXP amount
@@ -102,13 +100,10 @@ function checkExpCollision() {
 function moveEnemy() {
     if (isMonsterAlive) {
         const enemyRect = enemy.getBoundingClientRect();
-
-        // Calculate direction to player
         const dx = playerPosition.x - enemyRect.left;
         const dy = playerPosition.y - enemyRect.top;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        // Normalize direction vector
         if (distance > 0) {
             const moveX = (dx / distance) * monsterSpeed;
             const moveY = (dy / distance) * monsterSpeed;
@@ -117,7 +112,6 @@ function moveEnemy() {
             enemy.style.top = `${enemyRect.top + moveY}px`;
         }
 
-        // Automatically attack the player if close enough
         if (distance < 50) {
             attackMonster();
         }
@@ -159,3 +153,10 @@ function gameLoop() {
 
 // Start the game loop
 gameLoop();
+
+// Load dev mode functionality
+import('./devMode.js')
+    .then(module => {
+        module.initialize(devButton, player, enemy);
+    })
+    .catch(err => console.error("Failed to load dev mode:", err));
