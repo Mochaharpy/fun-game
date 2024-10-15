@@ -2,9 +2,14 @@ export function initialize(devButton, player, enemy) {
     let isActive = false;
 
     devButton.addEventListener('click', () => {
-        const code = prompt("Enter dev code:");
-        if (code === "dev") {
-            isActive = true;
+        if (!isActive) {
+            const code = prompt("Enter dev code:");
+            if (code === "dev") {
+                isActive = true;
+                alert("Dev mode activated! Click to summon enemies.");
+            } else {
+                alert("Incorrect code! Please try again.");
+            }
         }
     });
 
@@ -15,12 +20,10 @@ export function initialize(devButton, player, enemy) {
     });
 
     function summonEnemy(x, y) {
-        if (enemy.style.display === 'none') {
-            enemy.style.left = `${x}px`;
-            enemy.style.top = `${y}px`;
-            enemy.style.display = 'block';
-            monsterHealth = 50; // Reset health
-            isMonsterAlive = true;
-        }
+        enemy.style.left = `${x}px`;
+        enemy.style.top = `${y}px`;
+        enemy.style.display = 'block';
+        monsterHealth = 50; // Reset health
+        isMonsterAlive = true;
     }
 }
