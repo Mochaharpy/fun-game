@@ -15,7 +15,7 @@ export function initialize(devButton, player, enemy) {
 
     document.addEventListener('click', (event) => {
         if (isActive) {
-            summonEnemy(event.clientX, event.clientY - 25); // Adjust position to center the enemy
+            summonEnemy(event.clientX - 25, event.clientY - 25); // Adjust position to center the enemy
         }
     });
 
