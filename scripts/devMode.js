@@ -1,4 +1,4 @@
-export function initialize(devButton, player, enemy) {
+export function initialize(devButton, player, monsters) {
     let isActive = false;
 
     devButton.addEventListener('click', () => {
@@ -20,10 +20,21 @@ export function initialize(devButton, player, enemy) {
     });
 
     function summonEnemy(x, y) {
-        enemy.style.left = `${x}px`;
-        enemy.style.top = `${y}px`;
-        enemy.style.display = 'block';
-        monsterHealth = 50; // Reset health
-        isMonsterAlive = true; // Ensure the enemy can be attacked and move
+        const newMonster = document.createElement('div');
+        newMonster.style.position = 'absolute';
+        newMonster.style.width = '50px';
+        newMonster.style.height = '50px';
+        newMonster.style.backgroundColor = 'red';
+        newMonster.style.left = `${x}px`;
+        newMonster.style.top = `${y}px`;
+        document.getElementById('game').appendChild(newMonster);
+
+        monsters.push({
+            element: newMonster,
+            health: 50,
+            speed: 1,
+            expAmount: Math.floor(Math.random() * 20) + 100, // Random EXP between 100 and 119
+            isAlive: true,
+        });
     }
 }
