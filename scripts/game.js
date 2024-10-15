@@ -2,7 +2,7 @@ const player = document.getElementById('player');
 const expBar = document.getElementById('exp-bar');
 const devButton = document.getElementById('dev-button');
 
-let playerPosition = { x: 375, y: 275 };
+let playerPosition = { x: 375, y: 275 }; // Initial player position
 let exp = 0;
 let expToLevelUp = 100;
 let monsters = [];
@@ -18,6 +18,29 @@ function updatePlayerPosition() {
 
 // Initial call to set player position
 updatePlayerPosition();
+
+// Function to gain EXP
+function gainExp(amount) {
+    exp += amount;
+    updateExpBar();
+
+    if (exp >= expToLevelUp) {
+        levelUp();
+    }
+}
+
+// Function to handle leveling up
+function levelUp() {
+    exp -= expToLevelUp;
+    expToLevelUp = Math.floor(expToLevelUp * 1.2);
+    updateExpBar();
+}
+
+// Function to update the EXP bar
+function updateExpBar() {
+    const percent = (exp / expToLevelUp) * 100;
+    expBar.style.width = `${percent}%`;
+}
 
 // Dev Mode Logic
 devButton.addEventListener('click', () => {
@@ -41,6 +64,13 @@ function summonEnemy(x, y) {
     newMonster.style.left = `${x}px`;
     newMonster.style.top = `${y}px`;
     document.getElementById('game').appendChild(newMonster);
+
+    // Example of enemy properties
+    monsters.push({
+        element: newMonster,
+        health: 50,
+        expAmount: Math.floor(Math.random() * 20) + 100,
+    });
 }
 
 // Game loop
@@ -49,5 +79,7 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// Start the game loop
-gameLoop();
+// Start the game loop after DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    gameLoop();
+});
