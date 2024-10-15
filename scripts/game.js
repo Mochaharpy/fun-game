@@ -1,6 +1,6 @@
 const player = document.getElementById('player');
 const enemy = document.getElementById('enemy');
-const expItem = document.getElementById('exp-drop');
+const expBar = document.getElementById('exp-bar');
 const levelDisplay = document.getElementById('level');
 const expDisplay = document.getElementById('exp');
 const devButton = document.getElementById('dev-button');
@@ -8,14 +8,13 @@ const devButton = document.getElementById('dev-button');
 let playerPosition = { x: 375, y: 275 };
 let level = 1;
 let exp = 0;
-const expToLevelUp = 100;
+let expToLevelUp = 100;
 
 // Monster properties
 let monsterHealth = 50;
 let monsterSpeed = 1; // Speed of the monster
-let monsterExp = 20; // Average EXP
+let monsterExp = 100; // Starting EXP for the monster
 let isMonsterAlive = true;
-let expOrbCount = 0; // Keep track of the number of EXP orbs dropped
 
 // Movement flags
 let keys = { w: false, a: false, s: false, d: false };
@@ -30,6 +29,7 @@ function updatePlayerPosition() {
 function gainExp(amount) {
     exp += amount;
     expDisplay.innerText = exp;
+    updateExpBar();
 
     if (exp >= expToLevelUp) {
         levelUp();
@@ -41,6 +41,8 @@ function levelUp() {
     level++;
     levelDisplay.innerText = level;
     exp -= expToLevelUp; // Reset EXP after leveling up
+    expToLevelUp = Math.floor(expToLevelUp * 1.2); // Increase required EXP for next level
+    updateExpBar();
 }
 
 // Function to attack the monster
@@ -58,16 +60,13 @@ function attackMonster() {
 // Function to drop the EXP item
 function dropExpItem() {
     const expDropped = Math.floor(monsterExp * (1 + (Math.random() * 0.2 - 0.1))); // 10% variation
-    expOrbCount++; // Increment the orb count
-    const size = Math.max(20, 20 + (expOrbCount * 2)); // Size grows but caps at a certain point
+    gainExp(expDropped);
+}
 
-    expItem.innerText = expDropped; // Show the EXP amount
-    expItem.style.display = 'block'; // Show the EXP item
-    expItem.style.left = `${enemy.style.left}`;
-    expItem.style.top = `${enemy.style.top}`;
-    expItem.dataset.amount = expDropped; // Store the amount in a data attribute
-    expItem.style.width = `${size}px`;
-    expItem.style.height = `${size}px`;
+// Update the EXP bar
+function updateExpBar() {
+    const percent = (exp / expToLevelUp) * 100;
+    expBar.style.width = `${percent}%`;
 }
 
 // Check collision with monster
@@ -80,19 +79,6 @@ function checkCollision() {
         playerRect.left > enemyRect.right ||
         playerRect.bottom < enemyRect.top ||
         playerRect.top > enemyRect.bottom
-    );
-}
-
-// Check collision with EXP item
-function checkExpCollision() {
-    const playerRect = player.getBoundingClientRect();
-    const expRect = expItem.getBoundingClientRect();
-
-    return !(
-        playerRect.right < expRect.left ||
-        playerRect.left > expRect.right ||
-        playerRect.bottom < expRect.top ||
-        playerRect.top > expRect.bottom
     );
 }
 
@@ -133,20 +119,13 @@ document.addEventListener('keyup', (event) => {
 
 // Game loop for continuous movement and enemy behavior
 function gameLoop() {
-    if (keys.w) playerPosition.y = Math.max(0, playerPosition.y - 3); // Moved 3 pixels
-    if (keys.s) playerPosition.y = Math.min(550, playerPosition.y + 3); // Moved 3 pixels
-    if (keys.a) playerPosition.x = Math.max(0, playerPosition.x - 3); // Moved 3 pixels
-    if (keys.d) playerPosition.x = Math.min(750, playerPosition.x + 3); // Moved 3 pixels
+    if (keys.w) playerPosition.y = Math.max(0, playerPosition.y - 3);
+    if (keys.s) playerPosition.y = Math.min(550, playerPosition.y + 3);
+    if (keys.a) playerPosition.x = Math.max(0, playerPosition.x - 3);
+    if (keys.d) playerPosition.x = Math.min(750, playerPosition.x + 3);
 
     updatePlayerPosition();
     moveEnemy();
-
-    // Check for collision with EXP item
-    if (checkExpCollision() && expItem.style.display === 'block') {
-        const expAmount = parseInt(expItem.dataset.amount);
-        gainExp(expAmount);
-        expItem.style.display = 'none'; // Hide the EXP item after pickup
-    }
 
     requestAnimationFrame(gameLoop); // Keep the game loop running
 }
