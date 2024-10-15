@@ -1,17 +1,12 @@
 const player = document.getElementById('player');
 const expBar = document.getElementById('exp-bar');
-const levelDisplay = document.getElementById('level');
 const devButton = document.getElementById('dev-button');
-const settingsMenu = document.getElementById('settings');
-const settingsButton = document.getElementById('settings-button');
 
 let playerPosition = { x: 375, y: 275 };
-let level = 1;
 let exp = 0;
 let expToLevelUp = 100;
 let canAttack = true;
 let monsters = [];
-let gamePaused = false;
 
 // Player properties
 const playerSpeed = 3;
@@ -34,7 +29,6 @@ function gainExp(amount) {
 
 // Function to handle leveling up
 function levelUp() {
-    level++;
     exp -= expToLevelUp;
     expToLevelUp = Math.floor(expToLevelUp * 1.2);
     updateExpBar();
@@ -44,38 +38,44 @@ function levelUp() {
 function updateExpBar() {
     const percent = (exp / expToLevelUp) * 100;
     expBar.style.width = `${percent}%`;
-    levelDisplay.innerText = level; // Show level above the bar
 }
 
-// Pause and resume game
-function togglePause() {
-    gamePaused = !gamePaused;
-    if (gamePaused) {
-        cancelAnimationFrame(gameLoopId);
-    } else {
-        gameLoop();
-    }
-}
-
-// Toggle settings menu
-function toggleSettings() {
-    settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
-    togglePause();
-}
-
-// Event listeners
-settingsButton.addEventListener('click', toggleSettings);
+// Dev Mode Logic
 devButton.addEventListener('click', () => {
-    // Your dev mode logic here
+    const code = prompt("Enter dev code:");
+    if (code === "dev") {
+        alert("Dev mode activated! Click to summon enemies.");
+        document.addEventListener('click', (event) => {
+            summonEnemy(event.clientX - 25, event.clientY - 25);
+        });
+    } else {
+        alert("Incorrect code! Please try again.");
+    }
 });
 
-// Game loop
-let gameLoopId;
+function summonEnemy(x, y) {
+    const newMonster = document.createElement('div');
+    newMonster.style.position = 'absolute';
+    newMonster.style.width = '50px';
+    newMonster.style.height = '50px';
+    newMonster.style.backgroundColor = 'red';
+    newMonster.style.left = `${x}px`;
+    newMonster.style.top = `${y}px`;
+    document.getElementById('game').appendChild(newMonster);
+
+    // Example of enemy properties
+    monsters.push({
+        element: newMonster,
+        health: 50,
+        expAmount: Math.floor(Math.random() * 20) + 100,
+    });
+}
+
+// Game loop (simplified)
 function gameLoop() {
-    if (!gamePaused) {
-        // Update game logic here
-        requestAnimationFrame(gameLoop);
-    }
+    // Game logic here
+    updatePlayerPosition();
+    requestAnimationFrame(gameLoop);
 }
 
 // Start the game loop
