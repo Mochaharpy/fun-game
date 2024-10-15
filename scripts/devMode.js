@@ -24,6 +24,6 @@ export function initialize(devButton, player, enemy) {
         enemy.style.top = `${y}px`;
         enemy.style.display = 'block';
         monsterHealth = 50; // Reset health
-        isMonsterAlive = true;
+        isMonsterAlive = true; // Ensure the enemy can be attacked and move
     }
 }
