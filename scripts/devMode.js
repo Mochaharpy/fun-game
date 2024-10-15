@@ -15,7 +15,7 @@ export function initialize(devButton, player, monsters) {
 
     document.addEventListener('click', (event) => {
         if (isActive) {
-            summonEnemy(event.clientX - 25, event.clientY - 25); // Adjust position to center the enemy
+            summonEnemy(event.clientX - 25, event.clientY - 25);
         }
     });
 
@@ -33,7 +33,7 @@ export function initialize(devButton, player, monsters) {
             element: newMonster,
             health: 50,
             speed: 1,
-            expAmount: Math.floor(Math.random() * 20) + 100, // Random EXP between 100 and 119
+            expAmount: Math.floor(Math.random() * 20) + 100,
             isAlive: true,
         });
     }
