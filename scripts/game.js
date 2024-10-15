@@ -133,10 +133,10 @@ document.addEventListener('keyup', (event) => {
 
 // Game loop for continuous movement and enemy behavior
 function gameLoop() {
-    if (keys.w) playerPosition.y = Math.max(0, playerPosition.y - 3); // Changed from 5 to 3
-    if (keys.s) playerPosition.y = Math.min(550, playerPosition.y + 3); // Changed from 5 to 3
-    if (keys.a) playerPosition.x = Math.max(0, playerPosition.x - 3); // Changed from 5 to 3
-    if (keys.d) playerPosition.x = Math.min(750, playerPosition.x + 3); // Changed from 5 to 3
+    if (keys.w) playerPosition.y = Math.max(0, playerPosition.y - 3); // Moved 3 pixels
+    if (keys.s) playerPosition.y = Math.min(550, playerPosition.y + 3); // Moved 3 pixels
+    if (keys.a) playerPosition.x = Math.max(0, playerPosition.x - 3); // Moved 3 pixels
+    if (keys.d) playerPosition.x = Math.min(750, playerPosition.x + 3); // Moved 3 pixels
 
     updatePlayerPosition();
     moveEnemy();
