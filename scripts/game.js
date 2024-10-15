@@ -11,10 +11,13 @@ const expToLevelUp = 100;
 
 // Monster properties
 let monsterHealth = 50;
-let monsterSpeed = 1; // Example speed property
+let monsterSpeed = 1; // Speed of the monster
 let monsterExp = 20; // Average EXP
 let isMonsterAlive = true;
 let expOrbCount = 0; // Keep track of the number of EXP orbs dropped
+
+// Movement flags
+let keys = { w: false, a: false, s: false, d: false };
 
 // Function to update player position
 function updatePlayerPosition() {
@@ -41,13 +44,12 @@ function levelUp() {
 
 // Function to attack the monster
 function attackMonster() {
-    if (isMonsterAlive) {
+    if (isMonsterAlive && checkCollision()) {
         monsterHealth -= 10; // Player does 10 damage
         if (monsterHealth <= 0) {
             isMonsterAlive = false;
             dropExpItem(); // Drop an EXP item when monster dies
             enemy.style.display = 'none'; // Hide the enemy
-            alert('You defeated the monster!');
         }
     }
 }
@@ -96,41 +98,64 @@ function checkExpCollision() {
     );
 }
 
+// Move enemy towards player
+function moveEnemy() {
+    if (isMonsterAlive) {
+        const enemyRect = enemy.getBoundingClientRect();
+
+        // Calculate direction to player
+        const dx = playerPosition.x - enemyRect.left;
+        const dy = playerPosition.y - enemyRect.top;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Normalize direction vector
+        if (distance > 0) {
+            const moveX = (dx / distance) * monsterSpeed;
+            const moveY = (dy / distance) * monsterSpeed;
+
+            enemy.style.left = `${enemyRect.left + moveX}px`;
+            enemy.style.top = `${enemyRect.top + moveY}px`;
+        }
+
+        // Automatically attack the player if close enough
+        if (distance < 50) {
+            attackMonster();
+        }
+    }
+}
+
 // Keydown event listener
 document.addEventListener('keydown', (event) => {
-    switch(event.key) {
-        case 'ArrowUp':
-        case 'w':
-            playerPosition.y = Math.max(0, playerPosition.y - 5);
-            break;
-        case 'ArrowDown':
-        case 's':
-            playerPosition.y = Math.min(550, playerPosition.y + 5);
-            break;
-        case 'ArrowLeft':
-        case 'a':
-            playerPosition.x = Math.max(0, playerPosition.x - 5);
-            break;
-        case 'ArrowRight':
-        case 'd':
-            playerPosition.x = Math.min(750, playerPosition.x + 5);
-            break;
-        case ' ':
-            attackMonster(); // Attack the monster on spacebar press
-            break;
+    if (keys.hasOwnProperty(event.key)) {
+        keys[event.key] = true;
     }
+});
+
+document.addEventListener('keyup', (event) => {
+    if (keys.hasOwnProperty(event.key)) {
+        keys[event.key] = false;
+    }
+});
+
+// Game loop for continuous movement and enemy behavior
+function gameLoop() {
+    if (keys.w) playerPosition.y = Math.max(0, playerPosition.y - 5);
+    if (keys.s) playerPosition.y = Math.min(550, playerPosition.y + 5);
+    if (keys.a) playerPosition.x = Math.max(0, playerPosition.x - 5);
+    if (keys.d) playerPosition.x = Math.min(750, playerPosition.x + 5);
+
     updatePlayerPosition();
+    moveEnemy();
 
-    // Check for collision with the monster
-    if (checkCollision()) {
-        alert('You are close to the monster! Press space to attack.');
-    }
-
-    // Check for collision with the EXP item
+    // Check for collision with EXP item
     if (checkExpCollision() && expItem.style.display === 'block') {
         const expAmount = parseInt(expItem.dataset.amount);
         gainExp(expAmount);
         expItem.style.display = 'none'; // Hide the EXP item after pickup
-        alert(`You picked up ${expAmount} EXP!`);
     }
-});
+
+    requestAnimationFrame(gameLoop); // Keep the game loop running
+}
+
+// Start the game loop
+gameLoop();
