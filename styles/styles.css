@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    border: 2px solid #000;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+#player {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: blue; /* Player */
+}
+
+.monster {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red; /* Enemy */
+}
+
+.exp-item {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: gold; /* EXP item */
+    display: none; /* Initially hidden */
+    transition: all 0.3s ease; /* Smooth transition for size changes */
+}
+
+#stats {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
