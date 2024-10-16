@@ -8,6 +8,8 @@ let expToLevelUp = 100;
 let monsters = [];
 let attacking = false; // Toggle for attack mode
 let direction = 'right'; // Default facing direction
+let playerHealth = 100; // Player's initial health
+const monsterSpeed = 1; // Monster movement speed
 
 // Player properties
 const playerSpeed = 3;
@@ -52,7 +54,6 @@ document.addEventListener('keypress', (event) => {
 // Function to attack in the current direction
 function attack() {
     if (attacking) {
-        // Define attack area (for simplicity, we attack a square area in front of the player)
         const attackArea = {
             x: playerPosition.x + (direction === 'right' ? 50 : -50),
             y: playerPosition.y,
@@ -60,7 +61,6 @@ function attack() {
             height: 50,
         };
 
-        // Check for monsters in the attack area
         monsters.forEach((monster, index) => {
             const monsterRect = monster.element.getBoundingClientRect();
             const attackRect = {
@@ -77,7 +77,7 @@ function attack() {
                 monsterRect.top < attackRect.bottom &&
                 monsterRect.bottom > attackRect.top
             ) {
-                // Damage the monster or handle it
+                // Damage the monster
                 monster.health -= 10; // Reduce health by 10
                 if (monster.health <= 0) {
                     monster.element.remove();
@@ -89,10 +89,46 @@ function attack() {
     }
 }
 
+// Function to move monsters toward the player
+function moveMonsters() {
+    monsters.forEach((monster) => {
+        const monsterRect = monster.element.getBoundingClientRect();
+        const playerRect = player.getBoundingClientRect();
+
+        // Calculate the distance to the player
+        const dx = playerRect.x - monsterRect.x;
+        const dy = playerRect.y - monsterRect.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Move monster toward the player
+        if (distance > 50) { // Don't move if close enough
+            const moveX = (dx / distance) * monsterSpeed;
+            const moveY = (dy / distance) * monsterSpeed;
+
+            monster.element.style.left = `${monsterRect.x + moveX}px`;
+            monster.element.style.top = `${monsterRect.y + moveY}px`;
+        }
+
+        // Check for collision with the player
+        if (monsterRect.left < playerRect.right &&
+            monsterRect.right > playerRect.left &&
+            monsterRect.top < playerRect.bottom &&
+            monsterRect.bottom > playerRect.top) {
+            // Damage the player
+            playerHealth -= 5; // Reduce player health
+            alert(`Player health: ${playerHealth}`);
+            // Push the player away
+            playerPosition.x -= moveX * 2;
+            playerPosition.y -= moveY * 2;
+        }
+    });
+}
+
 // Game loop
 function gameLoop() {
     updatePlayerPosition();
     attack(); // Call the attack function in the game loop
+    moveMonsters(); // Move monsters toward the player
     requestAnimationFrame(gameLoop);
 }
 
