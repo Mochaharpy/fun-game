@@ -6,6 +6,8 @@ let playerPosition = { x: 375, y: 275 }; // Initial player position
 let exp = 0;
 let expToLevelUp = 100;
 let monsters = [];
+let attacking = false; // Toggle for attack mode
+let direction = 'right'; // Default facing direction
 
 // Player properties
 const playerSpeed = 3;
@@ -15,9 +17,6 @@ function updatePlayerPosition() {
     player.style.left = `${playerPosition.x}px`;
     player.style.top = `${playerPosition.y}px`;
 }
-
-// Initial call to set player position
-updatePlayerPosition();
 
 // Function to gain EXP
 function gainExp(amount) {
@@ -42,44 +41,85 @@ function updateExpBar() {
     expBar.style.width = `${percent}%`;
 }
 
-// Dev Mode Logic
-devButton.addEventListener('click', () => {
-    const code = prompt("Enter dev code:");
-    if (code === "dev") {
-        alert("Dev mode activated! Click to summon enemies.");
-        document.addEventListener('click', (event) => {
-            summonEnemy(event.clientX - 25, event.clientY - 25);
-        });
-    } else {
-        alert("Incorrect code! Please try again.");
+// Toggle Attack
+document.addEventListener('keypress', (event) => {
+    if (event.key === 't') { // Press 't' to toggle attack mode
+        attacking = !attacking;
+        alert(`Attack mode is now ${attacking ? 'ON' : 'OFF'}`);
     }
 });
 
-function summonEnemy(x, y) {
-    const newMonster = document.createElement('div');
-    newMonster.style.position = 'absolute';
-    newMonster.style.width = '50px';
-    newMonster.style.height = '50px';
-    newMonster.style.backgroundColor = 'red';
-    newMonster.style.left = `${x}px`;
-    newMonster.style.top = `${y}px`;
-    document.getElementById('game').appendChild(newMonster);
+// Function to attack in the current direction
+function attack() {
+    if (attacking) {
+        // Define attack area (for simplicity, we attack a square area in front of the player)
+        const attackArea = {
+            x: playerPosition.x + (direction === 'right' ? 50 : -50),
+            y: playerPosition.y,
+            width: 50,
+            height: 50,
+        };
 
-    // Example of enemy properties
-    monsters.push({
-        element: newMonster,
-        health: 50,
-        expAmount: Math.floor(Math.random() * 20) + 100,
-    });
+        // Check for monsters in the attack area
+        monsters.forEach((monster, index) => {
+            const monsterRect = monster.element.getBoundingClientRect();
+            const attackRect = {
+                left: attackArea.x,
+                top: attackArea.y,
+                right: attackArea.x + attackArea.width,
+                bottom: attackArea.y + attackArea.height,
+            };
+
+            // Check for collision
+            if (
+                monsterRect.left < attackRect.right &&
+                monsterRect.right > attackRect.left &&
+                monsterRect.top < attackRect.bottom &&
+                monsterRect.bottom > attackRect.top
+            ) {
+                // Damage the monster or handle it
+                monster.health -= 10; // Reduce health by 10
+                if (monster.health <= 0) {
+                    monster.element.remove();
+                    monsters.splice(index, 1); // Remove the monster from the array
+                    gainExp(monster.expAmount); // Gain EXP from defeating the monster
+                }
+            }
+        });
+    }
 }
 
 // Game loop
 function gameLoop() {
     updatePlayerPosition();
+    attack(); // Call the attack function in the game loop
     requestAnimationFrame(gameLoop);
 }
 
 // Start the game loop after DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     gameLoop();
+});
+
+// Add player movement
+document.addEventListener('keydown', (event) => {
+    switch (event.key) {
+        case 'ArrowUp':
+            playerPosition.y -= playerSpeed;
+            direction = 'up';
+            break;
+        case 'ArrowDown':
+            playerPosition.y += playerSpeed;
+            direction = 'down';
+            break;
+        case 'ArrowLeft':
+            playerPosition.x -= playerSpeed;
+            direction = 'left';
+            break;
+        case 'ArrowRight':
+            playerPosition.x += playerSpeed;
+            direction = 'right';
+            break;
+    }
+    updatePlayerPosition();
 });
