@@ -3,24 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpha Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Survival Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game">
-        <div id="player"></div>
-        <div id="exp-bar-container">
-            <div id="exp-bar"></div>
+    <div id="start-screen" class="screen">
+        <h1>Surge Strike</h1>
+        <button id="start-button">Start</button>
+    </div>
+
+    <div id="play-screen" class="screen" style="display: none;">
+        <div id="player"></div> <!-- Player div -->
+        <div class="arena"></div> <!-- Arena div -->
+        <button id="reset-button" style="display: none;">Abort</button> <!-- Hidden initially -->
+
+        <div id="settings-menu" style="display: none;">
+            <div class="overlay"></div>
+            <button id="close-settings" style="position: absolute; top: 10px; right: 10px; font-size: 20px; z-index: 1005;">X</button>
+            <h2 id="settings-title">Settings</h2> <!-- Title that will change -->
+            <div class="button-container">
+                <button id="dev-button" class="dev-button">Developer Mode</button>
+                <button id="abort-button" class="abort-button">Abort</button>
+                <button id="dev-settings" class="dev-settings" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Developer Modal -->
+        <div id="developer-modal" style="display: none; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 10px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1002;">
+            <button id="close-dev-modal" style="position: absolute; top: 10px; right: 10px; font-size: 10px; z-index: 1005; background-color: rgba(0, 0, 0, 0); color: black;">X</button>
+            <h3>Enter Developer Password</h3>
+            <input type="password" id="dev-password" placeholder="Password" />
+            <p id="dev-error-message"></p>
         </div>
     </div>
-    <button id="dev-button">Developer Mode</button>
-    <div id="dev-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <input type="text" id="dev-code" placeholder="Enter Dev Code">
-            <button id="confirm-dev-button">Confirm</button>
-        </div>
-    </div>
-    <script type="module" src="scripts/game.js"></script>
+
+    <script src="game.js"></script>
 </body>
 </html>
