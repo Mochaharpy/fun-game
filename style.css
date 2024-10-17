@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* Prevent scrolling */
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full height of the viewport */
+}
+
+.screen {
+  text-align: center;
+  padding: 20px;
+}
+
+button {
+  position: relative; /* Position relative for the pseudo-element */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 0; /* Add some spacing between buttons */
+  border: none; /* Remove default border */
+  background-color: grey; /* Default background color */
+  color: white; /* Text color */
+  transition: color 0.3s; /* Smooth transition for text color */
+}
+
+button:hover {
+  color: white; /* Keep text color white on hover */
+}
+
+button::after {
+  content: ""; /* Pseudo-element for lightening effect */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.3); /* light overlay */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s; /* Smooth transition for overlay */
+}
+
+button:hover::after {
+  opacity: 1; /* Show the overlay on hover */
+}
+
+.arena {
+  width: 80vw;
+  height: 70vh;
+  border: 3px solid black;
+  background-color: transparent;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#player {
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+  position: absolute; /* Position player absolutely within the arena */
+}
+
+/* Settings Menu Styles */
+#settings-menu {
+  position: fixed; /* Fixed position to cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* Initially hidden */
+  flex-direction: column;
+  justify-content: flex-start; /* Align items at the top */
+  align-items: center;
+  z-index: 1000; /* Ensure it's above all other elements */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  z-index: 999; /* Ensure overlay is above the game but below menu content */
+}
+
+h2 {
+  margin-top: 20px; /* Space above the settings title */
+  color: white; /* Text color */
+}
+
+/* Flex container for buttons */
+.button-container {
+  position: absolute; /* Position absolutely for fixed placement */
+  bottom: 20px; /* Space from the bottom */
+  right: 20px; /* Space from the right */
+  display: flex; /* Use flexbox for alignment */
+}
+
+.abort-button {
+  background-color: red; /* Red background for abort button */
+  color: white; /* White text */
+  z-index: 1002;
+}
+
+.dev-button {
+  margin-right: 10px; /* Add space between buttons */
+  z-index: 1002;
+}
+
+#settings-title {
+    font-size: 2em; /* Increase font size for visibility */
+    color: white; /* Change to white for better contrast */
+    z-index: 1002; /* Ensure the title is above the overlay */
+    margin-top: 15px; /* Space above the title */
+    margin-left: 15px;
+    align-self: flex-start; /* Align to the start of the flex container */
+}
+
+.close-settings {
+  z-index: 1003;
+}
