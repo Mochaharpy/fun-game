@@ -46,8 +46,8 @@ button:hover::after {
 }
 
 .arena {
-  width: 80vw;
-  height: 70vh;
+  width: calc(100vw - 6px);
+  height: calc(100vh - 6px);
   border: 3px solid black;
   background-color: transparent;
   position: relative;
@@ -122,4 +122,19 @@ h2 {
 
 .close-settings {
   z-index: 1003;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#developer-settings {
+  z-index: 1002;
+  left: 10px
+}
+
+.monster-cycle {
+  z-index: 1002;
+}
+
+#current-monster {
+  z-index: 1002;
+  color: white;
 }
