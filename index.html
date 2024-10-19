@@ -24,7 +24,14 @@
             <div class="button-container">
                 <button id="dev-button" class="dev-button">Developer Mode</button>
                 <button id="abort-button" class="abort-button">Abort</button>
-                <button id="dev-settings" class="dev-settings" style="display: none;">
+                <button id="dev-settings" class="dev-settings" style="display: none;">Developer Settings</button>
+            </div>
+
+            <!-- Developer Settings -->
+            <div id="developer-settings" style="display: none; left: 10px;">
+                <button id="monster-cycle">Cycle Monsters</button>
+                <button id="spawn-monster-button">Spawn Selected Monster</button>
+                <div id="current-monster">Current Monster: Goblin</div>
             </div>
         </div>
 
@@ -36,7 +43,7 @@
             <p id="dev-error-message"></p>
         </div>
     </div>
-
-    <script src="game.js"></script>
+    <script src="monster.js" type="module"></script>
+    <script src="game.js" type="module"></script>
 </body>
 </html>
