@@ -1,4 +1,4 @@
-import { monsters } from "./monster.js"; // Adjust the path as necessary
+import { monsters } from "./monster.js";
 
 let keys = {}; // Object to keep track of pressed keys
 let gamePaused = false; // Track whether the game is paused
