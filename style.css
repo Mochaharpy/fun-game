@@ -3,9 +3,9 @@ body {
   font-family: Arial, sans-serif;
   overflow: hidden; /* Prevent scrolling */
   display: flex; /* Use flexbox for centering */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 100vh; /* Full height of the viewport */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .screen {
@@ -20,7 +20,7 @@ button {
   cursor: pointer;
   margin: 10px 0; /* Add some spacing between buttons */
   border: none; /* Remove default border */
-  background-color: grey; /* Default background color */
+  background-color: grey;
   color: white; /* Text color */
   transition: color 0.3s; /* Smooth transition for text color */
 }
